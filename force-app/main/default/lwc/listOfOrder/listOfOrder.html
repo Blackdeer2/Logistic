@@ -1,0 +1,10 @@
+<template>
+    <lightning-card title="Orders" icon-name="standard:orders">
+        <template if:true={orders}>
+            <lightning-datatable key-field="Id" data={orders} columns={columns}></lightning-datatable>
+        </template>
+        <template if:true={error}>
+            <p class="slds-text-color_error">Error: {error.body.message}</p>
+        </template>
+    </lightning-card>
+</template>

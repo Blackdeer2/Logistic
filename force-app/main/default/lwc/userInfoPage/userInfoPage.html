@@ -1,0 +1,31 @@
+<template>
+    <lightning-card title="User Information" icon-name="standard:user" class="user-info-card">
+        <template if:true={currentUserName}>
+            <div class="slds-p-horizontal_medium slds-text-align_center">
+                <h2 class="slds-text-heading_medium">Welcome, {currentUserName}!</h2>
+            </div>
+            <lightning-layout vertical-align="start" class="slds-box slds-box_xx-small slds-m-top_medium">
+                <lightning-layout-item padding="around-medium">
+                    <p class="slds-text-title_bold">Email:</p>
+                    <p>{currentUserEmailId}</p>
+                </lightning-layout-item>
+                <lightning-layout-item padding="around-medium">
+                    <p class="slds-text-title_bold">Company:</p>
+                    <p>{userCompany}</p>
+                </lightning-layout-item>
+            </lightning-layout>
+        </template>
+        <template if:false={currentUserName}>
+            <div class="slds-p-horizontal_medium slds-text-align_center">
+                <p>Loading user information...</p>
+            </div>
+        </template>
+        <template if:true={clientId}>
+            <!-- Вставляємо дочірній компонент -->
+            <c-list-of-order client-id={clientId}></c-list-of-order>
+            <lightning-flow flow-name="Create_order" flow-params={flowParams}>
+            </lightning-flow>
+        </template>
+        <div>{flowParams.value}</div>
+    </lightning-card>
+</template>

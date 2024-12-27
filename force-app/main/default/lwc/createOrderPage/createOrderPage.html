@@ -1,0 +1,42 @@
+<template>
+    <lightning-card title="Client Data">
+        <div class="slds-m-around_medium">
+            <lightning-input label="Client Name" value={clientName} onchange={handleClientNameChange}></lightning-input>
+            <lightning-input label="Contact Name" value={contactName}
+                onchange={handleContactNameChange}></lightning-input>
+            <lightning-input label="Contact Phone" value={contactPhone}
+                onchange={handleContactPhoneChange}></lightning-input>
+            <lightning-input label="Contact Email" value={contactEmail}
+                onchange={handleContactEmailChange}></lightning-input>
+            <!-- <lightning-button label="Create Order" onclick={createOrder}></lightning-button> -->
+
+            <!-- <lightning-input label="Cargo Name" value={cargoName} onchange={handleCargoNameChange}></lightning-input>
+            <lightning-input label="Weight (Kg)" value={cargoweight}
+                onchange={handleCargoweightChange}></lightning-input>
+            <lightning-input label="Volume" value={cargoVolume} onchange={handleCargoVolumeChange}></lightning-input>
+
+            <lightning-input type="checkbox" label="Liquid Cargo" onchange={handleCheckboxChange} data-id="liquid">
+            </lightning-input>
+
+            <lightning-input type="checkbox" label="Explosive Cargo" onchange={handleCheckboxChange}
+                data-id="explosive">
+            </lightning-input>
+
+            <lightning-input type="checkbox" label="Perishable Cargo" onchange={handleCheckboxChange}
+                data-id="perishable">
+            </lightning-input>
+
+            <lightning-input label="Order Name" value={orderName} onchange={handleOrderNameChange}></lightning-input>
+            <lightning-input label="Start Delivery Date" value={orderSartDate}
+                onchange={handleOrderStartDateChange}></lightning-input>
+            <lightning-input label="End Delivery Date" value={orderEndDate}
+                onchange={handleOrderEndDateChange}></lightning-input>
+            <lightning-input label="Pick Up Location" value={orderPickUpLocation}
+                onchange={handleorderPickUpLocationChange}></lightning-input>
+            <lightning-input label="Delivery Location" value={orderDeliveryLocation}
+                onchange={handleOrderDeliveryLocationChange}></lightning-input> -->
+
+            <lightning-button label="Submit" onclick={submit}></lightning-button>
+        </div>
+    </lightning-card>
+</template>
