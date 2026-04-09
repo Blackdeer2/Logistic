@@ -1,31 +1,41 @@
 <template>
-    <lightning-card title="User Information" icon-name="standard:user" class="user-info-card">
-        <template if:true={currentUserName}>
-            <div class="slds-p-horizontal_medium slds-text-align_center">
-                <h2 class="slds-text-heading_medium">Welcome, {currentUserName}!</h2>
-            </div>
-            <lightning-layout vertical-align="start" class="slds-box slds-box_xx-small slds-m-top_medium">
-                <lightning-layout-item padding="around-medium">
-                    <p class="slds-text-title_bold">Email:</p>
-                    <p>{currentUserEmailId}</p>
-                </lightning-layout-item>
-                <lightning-layout-item padding="around-medium">
-                    <p class="slds-text-title_bold">Company:</p>
-                    <p>{userCompany}</p>
-                </lightning-layout-item>
-            </lightning-layout>
-        </template>
-        <template if:false={currentUserName}>
-            <div class="slds-p-horizontal_medium slds-text-align_center">
-                <p>Loading user information...</p>
-            </div>
-        </template>
-        <template if:true={clientId}>
-            <!-- Вставляємо дочірній компонент -->
-            <c-list-of-order client-id={clientId}></c-list-of-order>
-            <lightning-flow flow-name="Create_order" flow-params={flowParams}>
-            </lightning-flow>
-        </template>
-        <div>{flowParams.value}</div>
+    <lightning-card title="Мій профіль" icon-name="standard:user">
+        
+        <div class="slds-p-around_medium">
+            <template if:true={clientData}>
+                <div class="slds-grid slds-wrap slds-gutters">
+                    
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-m-bottom_medium">
+                        <p class="slds-text-title_caps slds-text-color_weak">Ім'я та Прізвище</p>
+                        <p class="slds-text-heading_small">{clientData.Name}</p>
+                    </div>
+
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-m-bottom_medium">
+                        <p class="slds-text-title_caps slds-text-color_weak">Контактний Email</p>
+                        <p class="slds-text-heading_small">{clientData.Contact_Email__c}</p>
+                    </div>
+
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-m-bottom_medium">
+                        <p class="slds-text-title_caps slds-text-color_weak">Номер телефону</p>
+                        <p class="slds-text-heading_small">
+                            <template if:true={clientData.Contact_Phone__c}>
+                                {clientData.Contact_Phone__c}
+                            </template>
+                            <template if:false={clientData.Contact_Phone__c}>
+                                <span class="slds-text-color_weak">Не вказано</span>
+                            </template>
+                        </p>
+                    </div>
+
+                </div>
+            </template>
+
+            <template if:true={error}>
+                <div class="slds-text-color_error">
+                    Помилка: {error}
+                </div>
+            </template>
+        </div>
+
     </lightning-card>
 </template>

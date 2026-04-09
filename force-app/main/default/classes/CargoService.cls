@@ -19,4 +19,8 @@ public with sharing class CargoService {
         insert cargo;
         return cargo.Id;
     }
+
+    public static void testfunc(){
+
+    }
 }

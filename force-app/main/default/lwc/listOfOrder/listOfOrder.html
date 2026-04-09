@@ -1,10 +1,28 @@
 <template>
-    <lightning-card title="Orders" icon-name="standard:orders">
-        <template if:true={orders}>
-            <lightning-datatable key-field="Id" data={orders} columns={columns}></lightning-datatable>
-        </template>
-        <template if:true={error}>
-            <p class="slds-text-color_error">Error: {error.body.message}</p>
-        </template>
+    <lightning-card title="Мої замовлення" icon-name="standard:orders">
+        
+        <div class="slds-p-around_medium">
+            <template if:true={error}>
+                <div class="slds-text-color_error slds-m-bottom_medium">
+                    Помилка завантаження: {error}
+                </div>
+            </template>
+
+            <template if:true={hasOrders}>
+                <lightning-datatable
+                    key-field="Id"
+                    data={orders}
+                    columns={columns}
+                    hide-checkbox-column="true">
+                </lightning-datatable>
+            </template>
+
+            <template if:false={hasOrders}>
+                <div class="slds-text-align_center slds-text-color_weak slds-p-around_medium">
+                    <p>У вас ще немає створених замовлень.</p>
+                </div>
+            </template>
+        </div>
+
     </lightning-card>
 </template>
