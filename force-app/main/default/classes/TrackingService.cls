@@ -1,4 +1,4 @@
-public with sharing class TrackingService {
+public without sharing class TrackingService {
     @AuraEnabled(cacheable=true)
     public static List<Tracking_Event__c> getTrackingEvents(Id orderId) {
         try {

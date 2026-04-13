@@ -2,34 +2,22 @@ import { LightningElement, wire, track } from 'lwc';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { refreshApex } from '@salesforce/apex';
 import getActiveOrders from '@salesforce/apex/DriverWorkspaceService.getActiveOrders';
-import updateOrderStatus from '@salesforce/apex/DriverWorkspaceService.updateOrderStatus';
-import createTrackingEvent from '@salesforce/apex/DriverWorkspaceService.createTrackingEvent'; // НОВИЙ ІМПОРТ
+import createTrackingEvent from '@salesforce/apex/DriverWorkspaceService.createTrackingEvent'; 
 
 export default class DriverWorkspace extends LightningElement {
-    @track isStatusModalOpen = false;
     @track isTrackingModalOpen = false;
-    
     @track selectedOrderId;
-    @track selectedStatus;
-    
-    // Дані для нової події трекінгу
     @track trackingData = { location: '', type: '', comments: '' };
 
     wiredOrdersResult;
 
-    statusOptions = [
-        { label: 'В процесі завантаження', value: 'В процесі' },
-        { label: 'Виїхав / В дорозі', value: 'В дорозі' },
-        { label: 'Успішно доставлено', value: 'Доставлено' }
-    ];
-
-    // УВАГА: Перевірте ці значення зі своїм полем Event_Type__c у CRM!
+    // Тут ми для Label пишемо українську (що бачить водій), а для Value - точний API Name (для бази)
     trackingTypeOptions = [
-        { label: 'Відправлення', value: 'Відправлення' },
-        { label: 'Проходження чекпойнту', value: 'Чекпойнт' },
-        { label: 'Митний контроль', value: 'Митниця' },
-        { label: 'Затримка в дорозі', value: 'Затримка' },
-        { label: 'Прибуття на розвантаження', value: 'Прибуття' }
+        { label: 'Завантажено в авто', value: 'Loaded' },
+        { label: 'Виїхав / В дорозі', value: 'In transit' },
+        { label: 'Проходження митниці', value: 'Clearing customs' },
+        { label: 'Прибув на склад (Чекаю розвантаження)', value: 'Arrived at warehouse' },
+        { label: 'Успішно доставлено', value: 'Delivered' }
     ];
 
     @wire(getActiveOrders)
@@ -37,53 +25,26 @@ export default class DriverWorkspace extends LightningElement {
         this.wiredOrdersResult = result;
     }
 
-    get orders() {
-        return this.wiredOrdersResult?.data;
-    }
-
-    // Керування вікнами
-    handleOpenStatusModal(event) {
-        this.selectedOrderId = event.target.dataset.id;
-        this.isStatusModalOpen = true;
-    }
+    get orders() { return this.wiredOrdersResult?.data; }
+    get isOrdersEmpty() { return this.orders && this.orders.length === 0; }
 
     handleOpenTrackingModal(event) {
         this.selectedOrderId = event.target.dataset.id;
-        // Очищаємо форму перед новим вводом
         this.trackingData = { location: '', type: '', comments: '' };
         this.isTrackingModalOpen = true;
     }
 
     closeModals() {
-        this.isStatusModalOpen = false;
         this.isTrackingModalOpen = false;
         this.selectedOrderId = null;
     }
 
-    // Збереження статусу рейсу
-    handleStatusChange(event) {
-        this.selectedStatus = event.detail.value;
-    }
-
-    saveStatus() {
-        if (!this.selectedStatus) return;
-        updateOrderStatus({ orderId: this.selectedOrderId, newStatus: this.selectedStatus })
-            .then(() => {
-                this.showToast('Успіх', 'Статус оновлено', 'success');
-                this.closeModals();
-                return refreshApex(this.wiredOrdersResult);
-            })
-            .catch(error => this.showToast('Помилка', error.body.message, 'error'));
-    }
-
-    // Логіка для Трекінгу
     handleTrackingChange(event) {
         const field = event.target.dataset.field;
         this.trackingData[field] = event.target.value;
     }
 
     saveTrackingEvent() {
-        // Проста валідація
         if (!this.trackingData.type || !this.trackingData.location) {
             this.showToast('Помилка', 'Будь ласка, вкажіть тип події та локацію', 'error');
             return;
@@ -96,14 +57,12 @@ export default class DriverWorkspace extends LightningElement {
             comments: this.trackingData.comments 
         })
         .then(() => {
-            this.showToast('Успіх', 'Подію трекінгу додано!', 'success');
+            this.showToast('Успіх', 'Маршрут оновлено!', 'success');
             this.closeModals();
-            // Тут refreshApex не обов'язковий, бо ми не виводимо трекінг на цій сторінці, 
-            // але це гарна практика для надійності
-            return refreshApex(this.wiredOrdersResult);
+            return refreshApex(this.wiredOrdersResult); // Оновлюємо список, доставлені рейси зникнуть
         })
         .catch(error => {
-            this.showToast('Помилка бази даних', error.body.message, 'error');
+            this.showToast('Помилка', error.body.message, 'error');
         });
     }
 

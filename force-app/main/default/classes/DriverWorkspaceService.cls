@@ -1,17 +1,30 @@
-public with sharing class DriverWorkspaceService {
+public without sharing class DriverWorkspaceService {
 
     @AuraEnabled(cacheable=true)
     public static List<Order__c> getActiveOrders() {
         try {
-            User u = [SELECT ContactId FROM User WHERE Id = :UserInfo.getUserId() LIMIT 1];
+            User u = [SELECT ContactId, Profile.Name FROM User WHERE Id = :UserInfo.getUserId() LIMIT 1];
+
+            // Для Адміна
+            if (u.Profile.Name == 'System Administrator') {
+                return [
+                    SELECT Id, Name, Pick_Up_Location__c, Delivery_Location__c, Statud__c, Start_Delivery_Date__c,
+                           Cargo__r.Name, Cargo__r.Weight_Kg__c, Cargo__r.Explosive__c
+                    FROM Order__c
+                    WHERE Statud__c NOT IN ('Delivered', 'Cancelled', 'Closed') 
+                    ORDER BY Start_Delivery_Date__c ASC
+                ];
+            }
+
+            // Для Водія
             if (u.ContactId == null) return new List<Order__c>();
 
             return [
                 SELECT Id, Name, Pick_Up_Location__c, Delivery_Location__c, Statud__c, Start_Delivery_Date__c,
-                       Cargo__r.Name, Cargo__r.Weight_Kg__c, Cargo__r.Explosive__c, Cargo__r.Liquid__c, Cargo__r.Perishable__c
+                       Cargo__r.Name, Cargo__r.Weight_Kg__c, Cargo__r.Explosive__c
                 FROM Order__c
                 WHERE Driver__r.Contact__c = :u.ContactId
-                  AND Statud__c != 'Доставлено' 
+                  AND Statud__c NOT IN ('Delivered', 'Cancelled', 'Closed') 
                 ORDER BY Start_Delivery_Date__c ASC
             ];
         } catch (Exception e) {
