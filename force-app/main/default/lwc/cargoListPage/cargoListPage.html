@@ -1,0 +1,55 @@
+<template>
+    <lightning-card title="Мої вантажі" icon-name="custom:custom98">
+        <div class="slds-p-around_medium">
+            <template if:true={cargoList.data}>
+                <div class="slds-grid slds-wrap slds-gutters">
+                    <template for:each={cargoList.data} for:item="item">
+                        <div key={item.Id} class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3 slds-m-bottom_medium">
+                            <article class="slds-card slds-card_boundary">
+                                <div class="slds-card__header slds-grid">
+                                    <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                                        <div class="slds-media__figure">
+                                            <lightning-icon icon-name="standard:product" size="small"></lightning-icon>
+                                        </div>
+                                        <div class="slds-media__body">
+                                            <h2 class="slds-card__header-title">
+                                                <span>{item.Name}</span>
+                                            </h2>
+                                        </div>
+                                    </header>
+                                </div>
+                                <div class="slds-card__body slds-card__body_inner">
+                                    <div class="slds-m-bottom_x-small">
+                                        <strong>Вага:</strong> {item.Weight_Kg__c} кг
+                                    </div>
+                                    <div class="slds-m-bottom_x-small">
+                                        <strong>Об'єм:</strong> {item.Volume__c} м³
+                                    </div>
+                                    <div class="slds-m-bottom_x-small">
+                                        <strong>Габарити:</strong> {item.Length__c} x {item.Width__c} x {item.Height__c} м
+                                    </div>
+                                    
+                                    <div class="slds-m-top_small">
+                                        <template if:true={item.Explosive__c}>
+                                            <lightning-badge label="Вибухонебезпечно" icon-name="utility:warning" class="slds-m-right_xx-small slds-theme_error"></lightning-badge>
+                                        </template>
+                                        <template if:true={item.Liquid__c}>
+                                            <lightning-badge label="Рідина" icon-name="utility:water" class="slds-m-right_xx-small slds-theme_info"></lightning-badge>
+                                        </template>
+                                        <template if:true={item.Perishable__c}>
+                                            <lightning-badge label="Швидкопсувне" icon-name="utility: Frozen" class="slds-m-right_xx-small slds-theme_success"></lightning-badge>
+                                        </template>
+                                    </div>
+                                </div>
+                            </article>
+                        </div>
+                    </template>
+                </div>
+            </template>
+            
+            <template if:false={cargoList.data}>
+                <p class="slds-text-align_center">Вантажі ще не зареєстровані.</p>
+            </template>
+        </div>
+    </lightning-card>
+</template>

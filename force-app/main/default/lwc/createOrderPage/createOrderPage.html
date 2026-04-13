@@ -1,35 +1,60 @@
 <template>
-    <lightning-card title="Оформлення замовлення" icon-name="standard:shipment">
+    <lightning-card title="Нове замовлення" icon-name="standard:shipment">
         <div class="slds-p-around_medium">
             
-            <h3 class="slds-section-title--divider slds-m-bottom_small slds-theme_shade">📦 Параметри вантажу</h3>
-            <div class="slds-grid slds-gutters slds-wrap">
-                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-m-bottom_small">
-                    <lightning-input type="number" label="Вага (кг)" data-id="weight" step="0.1" required></lightning-input>
+            <h3 class="slds-section__title slds-theme_shade slds-m-bottom_small">📍 Логістика</h3>
+            <div class="slds-grid slds-wrap slds-gutters">
+                <div class="slds-col slds-size_1-of-2 slds-m-bottom_small">
+                    <lightning-input label="Звідки" data-id="pickUp" required></lightning-input>
                 </div>
-                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-m-bottom_small">
-                    <lightning-input type="number" label="Об'єм (м³)" data-id="volume" step="0.1" required></lightning-input>
+                <div class="slds-col slds-size_1-of-2 slds-m-bottom_small">
+                    <lightning-input label="Куди" data-id="delivery" required></lightning-input>
                 </div>
-                <div class="slds-col slds-size_1-of-1 slds-m-bottom_small">
-                    <lightning-textarea label="Детальний опис вантажу" data-id="cargoDesc"></lightning-textarea>
+                <div class="slds-col slds-size_1-of-2 slds-m-bottom_small">
+                    <lightning-input type="datetime" label="Час завантаження" data-id="startDate" required></lightning-input>
+                </div>
+                <div class="slds-col slds-size_1-of-2 slds-m-bottom_small">
+                    <lightning-input type="datetime" label="Бажаний час доставки" data-id="endDate"></lightning-input>
                 </div>
             </div>
 
-            <h3 class="slds-section-title--divider slds-m-top_small slds-m-bottom_small slds-theme_shade">📍 Маршрут та Дати</h3>
-            <div class="slds-grid slds-gutters slds-wrap">
-                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-m-bottom_small">
-                    <lightning-input label="Звідки (Місце завантаження)" data-id="pickUp" required></lightning-input>
+            <h3 class="slds-section__title slds-theme_shade slds-m-top_medium slds-m-bottom_small">📦 Вантаж</h3>
+            
+            <div class="slds-grid slds-wrap slds-m-bottom_small">
+                <div class="slds-col slds-size_1-of-3">
+                    <lightning-input type="checkbox" label="Вибухонебезпечне" data-id="isExplosive"></lightning-input>
                 </div>
-                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-m-bottom_small">
-                    <lightning-input label="Куди (Місце доставки)" data-id="delivery" required></lightning-input>
+                <div class="slds-col slds-size_1-of-3">
+                    <lightning-input type="checkbox" label="Рідина" data-id="isLiquid"></lightning-input>
                 </div>
-                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-m-bottom_small">
-                    <lightning-input type="date" label="Дата відправки" data-id="startDate" required></lightning-input>
+                <div class="slds-col slds-size_1-of-3">
+                    <lightning-input type="checkbox" label="Швидкопсувне" data-id="isPerishable"></lightning-input>
+                </div>
+            </div>
+
+            <div class="slds-grid slds-wrap slds-gutters">
+                <div class="slds-col slds-size_1-of-1 slds-m-bottom_small">
+                    <lightning-input type="number" label="Вага (кг)" data-id="weight" required step="0.01"></lightning-input>
+                </div>
+                <div class="slds-col slds-size_1-of-4 slds-m-bottom_small">
+                    <lightning-input type="number" label="Д (м)" data-id="length" onchange={calculateVolume} step="0.01"></lightning-input>
+                </div>
+                <div class="slds-col slds-size_1-of-4 slds-m-bottom_small">
+                    <lightning-input type="number" label="Ш (м)" data-id="width" onchange={calculateVolume} step="0.01"></lightning-input>
+                </div>
+                <div class="slds-col slds-size_1-of-4 slds-m-bottom_small">
+                    <lightning-input type="number" label="В (м)" data-id="height" onchange={calculateVolume} step="0.01"></lightning-input>
+                </div>
+                <div class="slds-col slds-size_1-of-4 slds-p-top_large">
+                    <strong>Об'єм: {calculatedVolume} м³</strong>
+                </div>
+                <div class="slds-col slds-size_1-of-1">
+                    <lightning-textarea label="Опис вантажу" data-id="cargoDesc"></lightning-textarea>
                 </div>
             </div>
 
             <div class="slds-m-top_large slds-text-align_center">
-                <lightning-button label="Підтвердити замовлення" variant="brand" onclick={handleCreateOrder}></lightning-button>
+                <lightning-button variant="brand" label="Створити замовлення" onclick={handleCreateOrder}></lightning-button>
             </div>
 
         </div>

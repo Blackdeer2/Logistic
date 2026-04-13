@@ -20,7 +20,22 @@ public with sharing class CargoService {
         return cargo.Id;
     }
 
-    public static void testfunc(){
+@AuraEnabled(cacheable=true)
+    public static List<Cargo__c> getMyCargo() {
+        try {
+            // Отримуємо контакт поточного користувача
+            User u = [SELECT ContactId FROM User WHERE Id = :UserInfo.getUserId() LIMIT 1];
+            if (u.ContactId == null) return new List<Cargo__c>();
 
+            // Знаходимо всі Cargo__c, на які посилаються замовлення цього контакту
+            return [SELECT Id, Name, Weight_Kg__c, Volume__c, 
+                           Explosive__c, Liquid__c, Perishable__c, Description__c,
+                           Length__c, Width__c, Height__c
+                    FROM Cargo__c 
+                    WHERE Id IN (SELECT Cargo__c FROM Order__c WHERE Contact__c = :u.ContactId)
+                    ORDER BY CreatedDate DESC];
+        } catch (Exception e) {
+            throw new AuraHandledException('Помилка отримання списку вантажів: ' + e.getMessage());
+        }
     }
 }

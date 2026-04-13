@@ -1,0 +1,68 @@
+<template>
+    <lightning-card title="Мій профіль" icon-name="standard:contact">
+        <div slot="actions">
+            <template if:false={isEditMode}>
+                <lightning-button label="Редагувати" onclick={handleEdit}></lightning-button>
+            </template>
+            <template if:true={isEditMode}>
+                <lightning-button label="Скасувати" class="slds-m-right_small" onclick={handleCancel}></lightning-button>
+                <lightning-button label="Зберегти" variant="brand" onclick={handleSave}></lightning-button>
+            </template>
+        </div>
+
+        <div class="slds-p-around_medium">
+            <template if:true={contactData}>
+                <div class="slds-grid slds-wrap slds-gutters">
+                    
+                    <template if:false={isEditMode}>
+                        <div class="slds-col slds-size_1-of-2 slds-m-bottom_medium">
+                            <p class="slds-text-title">Ім'я</p>
+                            <p class="slds-text-heading_small">{contactData.FirstName}</p>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2 slds-m-bottom_medium">
+                            <p class="slds-text-title">Прізвище</p>
+                            <p class="slds-text-heading_small">{contactData.LastName}</p>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2 slds-m-bottom_medium">
+                            <p class="slds-text-title">Email</p>
+                            <p class="slds-text-heading_small">{contactData.Email}</p>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2 slds-m-bottom_medium">
+                            <p class="slds-text-title">Мобільний телефон</p>
+                            <p class="slds-text-heading_small">{contactData.MobilePhone}</p>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2 slds-m-bottom_medium">
+                            <p class="slds-text-title">Стаціонарний / Робочий</p>
+                            <p class="slds-text-heading_small">{contactData.Phone}</p>
+                        </div>
+                    </template>
+
+                    <template if:true={isEditMode}>
+                        <div class="slds-col slds-size_1-of-2 slds-m-bottom_small">
+                            <lightning-input label="Ім'я" value={editFields.FirstName} data-field="FirstName" onchange={handleChange}></lightning-input>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2 slds-m-bottom_small">
+                            <lightning-input label="Прізвище" value={editFields.LastName} data-field="LastName" onchange={handleChange}></lightning-input>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2 slds-m-bottom_small">
+                            <lightning-input type="email" label="Email" value={editFields.Email} data-field="Email" onchange={handleChange}></lightning-input>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2 slds-m-bottom_small">
+                            <lightning-input type="tel" label="Мобільний телефон" value={editFields.MobilePhone} data-field="MobilePhone" onchange={handleChange}></lightning-input>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2 slds-m-bottom_small">
+                            <lightning-input type="tel" label="Стаціонарний / Робочий" value={editFields.Phone} data-field="Phone" onchange={handleChange}></lightning-input>
+                        </div>
+                    </template>
+
+                </div>
+            </template>
+
+            <template if:false={contactData}>
+                <div class="slds-text-align_center slds-p-around_large">
+                    <lightning-spinner alternative-text="Завантаження..." size="medium"></lightning-spinner>
+                </div>
+            </template>
+        </div>
+    </lightning-card>
+</template>
