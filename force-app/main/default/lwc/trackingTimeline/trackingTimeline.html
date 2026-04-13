@@ -1,0 +1,50 @@
+<template>
+    <lightning-card title="Відстеження вантажу" icon-name="standard:location">
+        <div class="slds-p-around_medium">
+            <template if:true={events.data}>
+                <ul class="slds-timeline">
+                    <template for:each={events.data} for:item="event">
+                        <li key={event.Id}>
+                            <div class="slds-timeline__item_expandable slds-is-open">
+                                <div class="slds-media">
+                                    <div class="slds-media__figure">
+                                        <lightning-icon icon-name="standard:event" size="small"></lightning-icon>
+                                    </div>
+                                    <div class="slds-media__body">
+                                        <div class="slds-grid slds-grid_align-spread slds-timeline__trigger">
+                                            <div class="slds-grid slds-grid_vertical-align-center slds-truncate_container_75 slds-no-space">
+                                                <h3 class="slds-truncate" title={event.Event_Type__c}>
+                                                    <strong>{event.Event_Type__c} — {event.Location__c}</strong>
+                                                </h3>
+                                            </div>
+                                            <div class="slds-timeline__actions slds-timeline__actions_inline">
+                                                <p class="slds-timeline__date">
+                                                    <lightning-formatted-date-time 
+                                                        value={event.Event_Time__c} 
+                                                        year="numeric" month="short" day="2-digit" 
+                                                        hour="2-digit" minute="2-digit">
+                                                    </lightning-formatted-date-time>
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <p class="slds-m-horizontal_xx-small">
+                                            {event.Comments__c}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </template>
+                </ul>
+                
+                <template if:false={hasEvents}>
+                    <p class="slds-text-align_center slds-p-vertical_large">Поки що немає даних про переміщення.</p>
+                </template>
+            </template>
+            
+            <template if:true={events.error}>
+                <p class="slds-text-color_error">Сталася помилка при завантаженні даних.</p>
+            </template>
+        </div>
+    </lightning-card>
+</template>

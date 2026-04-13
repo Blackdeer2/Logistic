@@ -1,0 +1,93 @@
+<template>
+    <div class="slds-p-around_x-small">
+        <lightning-card title="📱 Мої поточні рейси" icon-name="custom:custom31">
+            <div class="slds-p-around_medium">
+                
+                <template if:true={orders}>
+                    <template for:each={orders} for:item="order">
+                        <article key={order.Id} class="slds-card slds-card_boundary slds-m-bottom_large slds-theme_shade slds-p-around_small">
+                            
+                            <div class="slds-text-heading_medium slds-m-bottom_small slds-text-align_center">
+                                <strong>{order.Pick_Up_Location__c} <br/> ⬇ <br/> {order.Delivery_Location__c}</strong>
+                            </div>
+                            <div class="slds-text-align_center slds-m-bottom_medium">
+                                <lightning-badge label={order.Statud__c} class="slds-theme_warning"></lightning-badge>
+                            </div>
+
+                            <div class="slds-box slds-theme_default slds-m-bottom_medium">
+                                <p><strong>📦 Вантаж:</strong> {order.Cargo__r.Name}</p>
+                                <p><strong>⚖️ Вага:</strong> {order.Cargo__r.Weight_Kg__c} кг</p>
+                                <template if:true={order.Cargo__r.Explosive__c}>
+                                    <p class="slds-text-color_error"><strong>🔥 ОБЕРЕЖНО: Вибухонебезпечно!</strong></p>
+                                </template>
+                            </div>
+
+                            <lightning-button variant="brand" label="Оновити статус" data-id={order.Id} onclick={handleOpenStatusModal} class="slds-m-bottom_small slds-button_stretch"></lightning-button>
+                            <lightning-button variant="neutral" label="📍 Додати подію (Трекінг)" data-id={order.Id} onclick={handleOpenTrackingModal} class="slds-button_stretch"></lightning-button>
+                        </article>
+                    </template>
+                </template>
+
+            </div>
+        </lightning-card>
+
+        <template if:true={isStatusModalOpen}>
+            <section role="dialog" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <h2 class="slds-text-heading_medium">Оновити статус рейсу</h2>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium">
+                        <lightning-combobox label="Поточний стан:" value={selectedStatus} options={statusOptions} onchange={handleStatusChange}></lightning-combobox>
+                    </div>
+                    <footer class="slds-modal__footer slds-grid slds-grid_align-spread">
+                        <lightning-button label="Скасувати" onclick={closeModals}></lightning-button>
+                        <lightning-button variant="brand" label="Зберегти" onclick={saveStatus}></lightning-button>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+
+        <template if:true={isTrackingModalOpen}>
+            <section role="dialog" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <h2 class="slds-text-heading_medium">📍 Нова подія маршруту</h2>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium">
+                        <lightning-combobox 
+                            label="Що відбулося?" 
+                            value={trackingData.type} 
+                            options={trackingTypeOptions} 
+                            data-field="type" 
+                            onchange={handleTrackingChange} 
+                            required>
+                        </lightning-combobox>
+                        
+                        <lightning-input 
+                            label="Де ви зараз? (Місто, митниця, траса)" 
+                            value={trackingData.location} 
+                            data-field="location" 
+                            onchange={handleTrackingChange} 
+                            required>
+                        </lightning-input>
+                        
+                        <lightning-textarea 
+                            label="Коментар (необов'язково)" 
+                            value={trackingData.comments} 
+                            data-field="comments" 
+                            onchange={handleTrackingChange}>
+                        </lightning-textarea>
+                    </div>
+                    <footer class="slds-modal__footer slds-grid slds-grid_align-spread">
+                        <lightning-button label="Скасувати" onclick={closeModals}></lightning-button>
+                        <lightning-button variant="brand" label="Відправити" onclick={saveTrackingEvent}></lightning-button>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+
+    </div>
+</template>
