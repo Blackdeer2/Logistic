@@ -1,0 +1,68 @@
+<template>
+    <lightning-card title="🤖 Розумний помічник ІСППР" icon-name="standard:search">
+        <div class="slds-p-around_medium">
+            
+            <template if:true={error}>
+                <div class="slds-text-color_error slds-text-align_center slds-m-bottom_medium">
+                    {error}
+                </div>
+            </template>
+
+            <template if:true={isDataReady}>
+                
+                <h3 class="slds-text-heading_small slds-m-bottom_small">🚚 Підходящі Автомобілі ({vehicles.length})</h3>
+                <template if:false={vehicles.length}>
+                    <p class="slds-text-color_error slds-m-bottom_medium">Не знайдено вільних авто, які підходять під цей вантаж.</p>
+                </template>
+                <div class="slds-m-bottom_medium">
+                    <template for:each={vehicles} for:item="veh">
+                        <div key={veh.Id} class={veh.cssClass} data-id={veh.Id} onclick={handleSelectVehicle}>
+                            <div class="slds-grid slds-grid_align-spread">
+                                <div>
+                                    <strong>{veh.Name}</strong>
+                                    <p class="slds-text-body_small slds-text-color_weak">Вантажопідйомність: {veh.Capacity__c} кг</p>
+                                </div>
+                                <div>
+                                    <lightning-badge label={veh.Type__c} class="slds-theme_info slds-m-right_xx-small"></lightning-badge>
+                                    <template if:true={veh.selected}>
+                                        <lightning-badge label="Обрано" class="slds-theme_success"></lightning-badge>
+                                    </template>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+
+                <h3 class="slds-text-heading_small slds-m-bottom_small">👤 Вільні Водії ({drivers.length})</h3>
+                <div class="slds-m-bottom_medium">
+                    <template for:each={drivers} for:item="drv">
+                        <div key={drv.Id} class={drv.cssClass} data-id={drv.Id} onclick={handleSelectDriver}>
+                            <div class="slds-grid slds-grid_align-spread">
+                                <strong>{drv.Name}</strong>
+                                <template if:true={drv.selected}>
+                                    <lightning-badge label="Обрано" class="slds-theme_success"></lightning-badge>
+                                </template>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+
+                <lightning-button 
+                    variant="brand" 
+                    label="Затвердити та Призначити" 
+                    onclick={saveAssignment} 
+                    class="slds-button_stretch"
+                    disabled={isSaveDisabled}>
+                </lightning-button>
+
+            </template>
+
+            <template if:false={isLoaded}>
+                <div class="slds-is-relative slds-p-around_large">
+                    <lightning-spinner alternative-text="Аналізуємо..." size="small"></lightning-spinner>
+                </div>
+            </template>
+
+        </div>
+    </lightning-card>
+</template>

@@ -1,0 +1,56 @@
+<template>
+    <lightning-card title="📦 Деталі пов'язаного вантажу" icon-name="standard:product">
+        <div class="slds-p-around_medium">
+            
+            <template if:true={cargoId}>
+                <lightning-record-view-form record-id={cargoId} object-api-name="Cargo__c">
+                    
+                    <div class="slds-grid slds-wrap slds-gutters">
+                        <div class="slds-col slds-size_1-of-1 slds-m-bottom_small">
+                            <lightning-output-field field-name="Name"></lightning-output-field>
+                        </div>
+                        
+                        <div class="slds-col slds-size_1-of-2 slds-m-bottom_small">
+                            <lightning-output-field field-name="Weight_Kg__c"></lightning-output-field>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2 slds-m-bottom_small">
+                            <lightning-output-field field-name="Volume__c"></lightning-output-field>
+                        </div>
+                        
+                        <div class="slds-col slds-size_1-of-3 slds-m-bottom_small">
+                            <lightning-output-field field-name="Length__c"></lightning-output-field>
+                        </div>
+                        <div class="slds-col slds-size_1-of-3 slds-m-bottom_small">
+                            <lightning-output-field field-name="Width__c"></lightning-output-field>
+                        </div>
+                        <div class="slds-col slds-size_1-of-3 slds-m-bottom_small">
+                            <lightning-output-field field-name="Height__c"></lightning-output-field>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-3">
+                            <lightning-output-field field-name="Explosive__c"></lightning-output-field>
+                        </div>
+                        <div class="slds-col slds-size_1-of-3">
+                            <lightning-output-field field-name="Liquid__c"></lightning-output-field>
+                        </div>
+                        <div class="slds-col slds-size_1-of-3">
+                            <lightning-output-field field-name="Perishable__c"></lightning-output-field>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-1 slds-m-top_small">
+                            <lightning-output-field field-name="Description__c"></lightning-output-field>
+                        </div>
+                    </div>
+
+                </lightning-record-view-form>
+            </template>
+
+            <template if:false={cargoId}>
+                <div class="slds-text-align_center slds-text-color_weak slds-p-around_medium">
+                    <p>Вантаж не прив'язано до цього замовлення, або дані завантажуються...</p>
+                </div>
+            </template>
+
+        </div>
+    </lightning-card>
+</template>

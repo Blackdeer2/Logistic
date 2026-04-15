@@ -25,7 +25,8 @@ public with sharing class OrderService {
             newCargo.Explosive__c = isExplosive;
             newCargo.Liquid__c = isLiquid;
             newCargo.Perishable__c = isPerishable;
-            newCargo.Name = 'Cargo for ' + currentUser.ContactId;
+            String route = 'Вантаж: ' + pickUp + ' ➔ ' + delivery;
+            newCargo.Name = route.left(80);
             insert newCargo;
 
             Order__c newOrder = new Order__c();
@@ -35,7 +36,7 @@ public with sharing class OrderService {
             newOrder.Delivery_Location__c = delivery;
             newOrder.Start_Delivery_Date__c = startDate;
             newOrder.End_Delivery_Date__c = endDate;
-            newOrder.Name = 'Order ' + Datetime.now().format();
+            //newOrder.Name = 'Order ' + Datetime.now().format();
             insert newOrder;
 
             return 'Success: Записи створено (Cargo ID: ' + newCargo.Id + ')';
@@ -51,7 +52,7 @@ public with sharing class OrderService {
     public static List<Order__c> listMyOrders() {
         try {
             // Отримуємо ContactId поточного клієнта
-            User currentUser = [SELECT ContactId FROM User WHERE Id = :UserInfo.getUserId() LIMIT 1];
+            User currentUser = [SELECT ContactId, Contact.Name FROM User WHERE Id = :UserInfo.getUserId() LIMIT 1];
             
             // Якщо це не клієнт порталу (наприклад, Адмін), повертаємо порожній список
             if (currentUser.ContactId == null) {
