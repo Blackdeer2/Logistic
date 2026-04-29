@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Categories_of_driver_s_licenses__c</fullName>
+    <label>Categories of driver&apos;s licenses</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetName>Categories_of_driver_s_licenses</valueSetName>
+    </valueSet>
+</CustomField>

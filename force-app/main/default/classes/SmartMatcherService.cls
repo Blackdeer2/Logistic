@@ -74,7 +74,7 @@ public with sharing class SmartMatcherService {
     @AuraEnabled
     public static void assignResources(Id orderId, Id vehicleId, Id driverId) {
         try {
-            update new Order__c(Id = orderId, Vehicle__c = vehicleId, Driver__c = driverId);
+            update new Order__c(Id = orderId, Vehicle__c = vehicleId, Driver__c = driverId, Statud__c = 'Pending Dispatch');
         } catch (Exception e) {
             throw new AuraHandledException('Помилка при призначенні: ' + e.getMessage());
         }
