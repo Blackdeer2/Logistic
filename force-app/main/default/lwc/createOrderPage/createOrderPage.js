@@ -13,25 +13,21 @@ export default class CreateOrderPage extends LightningElement {
     }
 
     handleCreateOrder() {
-        // Збір даних маршруту
         const pickUp = this.template.querySelector('[data-id="pickUp"]').value;
         const delivery = this.template.querySelector('[data-id="delivery"]').value;
         const startDate = this.template.querySelector('[data-id="startDate"]').value;
         const endDate = this.template.querySelector('[data-id="endDate"]').value;
 
-        // Збір даних вантажу
         const weight = parseFloat(this.template.querySelector('[data-id="weight"]').value) || 0;
         const length = parseFloat(this.template.querySelector('[data-id="length"]').value) || 0;
         const width = parseFloat(this.template.querySelector('[data-id="width"]').value) || 0;
         const height = parseFloat(this.template.querySelector('[data-id="height"]').value) || 0;
         const cargoDesc = this.template.querySelector('[data-id="cargoDesc"]').value;
 
-        // Збір чекбоксів (ОБОВ'ЯЗКОВО .checked)
         const isExplosive = this.template.querySelector('[data-id="isExplosive"]').checked;
         const isLiquid = this.template.querySelector('[data-id="isLiquid"]').checked;
         const isPerishable = this.template.querySelector('[data-id="isPerishable"]').checked;
 
-        // Перевірка
         if (!pickUp || !delivery || !startDate || !weight) {
             this.showToast('Помилка', 'Заповніть обов\'язкові поля (Звідки, Куди, Дату та Вагу)', 'error');
             return;

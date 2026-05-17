@@ -2,7 +2,6 @@ trigger TrackingEventTrigger on Tracking_Event__c (after insert) {
     Map<Id, String> ordersToUpdate = new Map<Id, String>();
 
     for (Tracking_Event__c evt : Trigger.new) {
-        // Зіставляємо подію трекінгу зі статусом замовлення (використовуємо API Names!)
         if (evt.Event_Type__c == 'Loaded') {
             ordersToUpdate.put(evt.Order__c, 'Pending Dispatch');
         } else if (evt.Event_Type__c == 'In transit') {
@@ -12,7 +11,6 @@ trigger TrackingEventTrigger on Tracking_Event__c (after insert) {
         } else if (evt.Event_Type__c == 'Delivered') {
             ordersToUpdate.put(evt.Order__c, 'Delivered');
         }
-        // Для 'Clearing customs' ми не додаємо умову, бо глобальний статус не змінюється
     }
 
     if (!ordersToUpdate.isEmpty()) {
@@ -23,7 +21,6 @@ trigger TrackingEventTrigger on Tracking_Event__c (after insert) {
                 Statud__c = ordersToUpdate.get(orderId)
             ));
         }
-        // Оновлюємо замовлення
         update ordersList;
     }
 }
